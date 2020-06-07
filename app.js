@@ -1,6 +1,7 @@
 const express = require('express');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const debug = require('debug')('app:debug');
 const genres = require('./routes/genres');
 
 const app = express();
@@ -9,7 +10,7 @@ app.use(helmet());
 
 if (app.get('env') === 'development') {
     app.use(morgan('tiny'));
-    console.log('Morgan enabled...');
+    debug('Morgan enabled...');
 }
 
 app.use(express.json());
