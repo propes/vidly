@@ -18,6 +18,16 @@ const genres = [{
 let nextId = 4;
 
 app.get('/api/genres', (req, res) => {
+    const sortBy = req.query.sortBy;
+    if (sortBy) {
+        return res.send(genres.sort((a, b) => 
+            (req.query.sortDesc === 'true' ?
+                a[sortBy] < b[sortBy] :
+                a[sortBy] > b[sortBy])
+            ? 1 : -1
+        ));
+    }
+
     res.send(genres);
 });
 
