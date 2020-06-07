@@ -18,14 +18,9 @@ const genres = [{
 let nextId = 4;
 
 app.get('/api/genres', (req, res) => {
-    const sortBy = req.query.sortBy;
-    if (sortBy) {
-        return res.send(genres.sort((a, b) => 
-            (req.query.sortDesc === 'true' ?
-                a[sortBy] < b[sortBy] :
-                a[sortBy] > b[sortBy])
-            ? 1 : -1
-        ));
+    if (req.query.sortBy) {
+        const sortedGenres = sortGenres(req.query.sortBy, req.query.sortDesc);
+        return res.send(sortedGenres);
     }
 
     res.send(genres);
@@ -86,13 +81,18 @@ function findGenre(id) {
     return genres.find(genre => genre.id === parseInt(id));
 }
 
+function sortGenres(sortBy, sortDesc) {
+    return genres.sort((a, b) => 
+        (sortDesc === 'true' ?
+            a[sortBy] < b[sortBy] :
+            a[sortBy] > b[sortBy])
+        ? 1 : -1
+    );
+}
+
 function deleteGenre(genre) {
     const index = genres.indexOf(genre);
     genres.splice(index, 1);
-}
-
-function sendGenreNotFound(res, id) {
-    res.status(404).send(`Could not find genre with id: ${id}`);
 }
 
 function isGenreValid(genre) {
@@ -113,6 +113,10 @@ function isGenreValid(genre) {
     return {
         valid: true
     };
+}
+
+function sendGenreNotFound(res, id) {
+    res.status(404).send(`Could not find genre with id: ${id}`);
 }
 
 const port = process.env.PORT || 3000;
