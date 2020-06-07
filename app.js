@@ -1,7 +1,11 @@
 const express = require('express');
 const Joi = require('@hapi/joi');
+const helmet = require('helmet');
+const morgan = require('morgan');
 const app = express();
 
+app.use(helmet());
+app.use(morgan('tiny'));
 app.use(express.json());
 
 const genres = [{
