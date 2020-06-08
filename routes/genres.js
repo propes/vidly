@@ -1,5 +1,6 @@
 const express = require('express'); 
 const Joi = require('@hapi/joi');
+const _ = require('lodash');
 
 const router = express.Router();
 
@@ -14,11 +15,11 @@ const genres = [{
     name: 'comedy'
 }];
 
-let nextId = 4;
+let nextId = genres.length + 1;
 
 router.get('/', (req, res) => {
     if (req.query.sortBy) {
-        const sortedGenres = sortGenres(req.query.sortBy, req.query.sortDesc);
+        const sortedGenres = sortGenres(req.query.sortBy, req.query.orderBy);
         return res.send(sortedGenres);
     }
 
@@ -80,13 +81,9 @@ function findGenre(id) {
     return genres.find(genre => genre.id === parseInt(id));
 }
 
-function sortGenres(sortBy, sortDesc) {
-    return genres.sort((a, b) => 
-        (sortDesc === 'true' ?
-            a[sortBy] < b[sortBy] :
-            a[sortBy] > b[sortBy])
-        ? 1 : -1
-    );
+function sortGenres(sortBy, orderBy) {
+    orderBy = orderBy || 'asc';
+    return _.orderBy(genres, sortBy, orderBy);
 }
 
 function deleteGenre(genre) {
