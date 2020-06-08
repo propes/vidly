@@ -8,27 +8,35 @@ mongoose.connect('mongodb://localhost/vidly')
 
 const reqBodySchema = Joi.object({
    name: Joi.string()
-      .alphanum()
-      .required()
+      .required(),
+   phone: Joi.string(),
+   isGold: Joi.boolean()
 });
 
 const dbSchema = mongoose.Schema({
    name: { 
       type: String,
       required: true
+   },
+   phone: String,
+   isGold: {
+      type: Boolean,
+      default: false
    }
 });
 
 const reqBodyMapper = (body) => {
-   return {
-      name: body.name
-   };
+   const model = {};
+   for (field in body) {
+      model[field] = body[field];
+   }
+   return model;
 }
 
-const Genre = mongoose.model('genre', dbSchema);
+const Customer = mongoose.model('customer', dbSchema);
 
 const router = new ModelRouter(
-   Genre,
+   Customer,
    reqBodySchema,
    reqBodyMapper
 );
