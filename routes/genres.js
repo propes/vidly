@@ -19,7 +19,10 @@ let nextId = genres.length + 1;
 
 router.get('/', (req, res) => {
     if (req.query.sortBy) {
-        const sortedGenres = sortGenres(req.query.sortBy, req.query.orderBy);
+        const sortedGenres = _.orderBy(
+            genres,
+            req.query.sortBy,
+            req.query.orderBy || 'asc');
         return res.send(sortedGenres);
     }
 
@@ -79,11 +82,6 @@ router.delete('/:id', (req, res) => {
 
 function findGenre(id) {
     return genres.find(genre => genre.id === parseInt(id));
-}
-
-function sortGenres(sortBy, orderBy) {
-    orderBy = orderBy || 'asc';
-    return _.orderBy(genres, sortBy, orderBy);
 }
 
 function deleteGenre(genre) {
