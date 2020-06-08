@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Joi = require('@hapi/joi');
 const _ = require('lodash');
+const debug = require('debug')('app:debug');
 
 const router = express.Router();
 
@@ -29,8 +30,14 @@ router.get('/', async (req, res) => {
     if (req.query.sortBy) {
         query = query.sort({ [req.query.sortBy]: req.query.orderBy });
     }
-    const genres = await query;
-    res.send(genres);
+
+    try {
+        const genres = await query;
+        res.send(genres);
+    }
+    catch (ex) {
+        debug(ex);
+    }
 });
 
 router.get('/:id', async (req, res) => {
@@ -39,7 +46,8 @@ router.get('/:id', async (req, res) => {
         res.send(await Genre.findById(req.params.id));
     }
     catch (ex) {
-        return sendGenreNotFound(res, req.params.id);
+        sendGenreNotFound(res, req.params.id);
+        debug(ex);
     }
 });
 
@@ -59,6 +67,7 @@ router.post('/', async (req, res) => {
     }
     catch (ex) {
         res.status(400).send(ex.message);
+        debug(ex);
     }
 });
 
@@ -80,6 +89,7 @@ router.put('/:id', async (req, res) => {
     }
     catch (ex) {
         res.status(400).send(ex.message);
+        debug(ex);
     }
 });
 
@@ -90,6 +100,7 @@ router.delete('/:id', async (req, res) => {
     }
     catch (ex) {
         res.status(400).send(ex.message);
+        debug(ex);
     }
 });
 
