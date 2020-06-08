@@ -10,7 +10,7 @@ mongoose.connect('mongodb://localhost/vidly')
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Could not connect to MongoDB...', err));
 
-const reqSchema = Joi.object({
+const reqBodySchema = Joi.object({
     name: Joi.string()
         .alphanum()
         .required()
@@ -52,18 +52,18 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    const { valid, message } = isGenreValid(req.body);
+    const { valid, message } = isRequestBodyValid(req.body);
     if (!valid) {
         return res.status(400).send(message);
     }
 
-    const genre = new Genre({
+    let genre = new Genre({
         name: req.body.name
     });
 
     try {
-        const result = await genre.save();
-        res.send(result);
+        genre = await genre.save();
+        res.send(genre);
     }
     catch (ex) {
         res.status(400).send(ex.message);
@@ -72,7 +72,7 @@ router.post('/', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
-    const { valid, message } = isGenreValid(req.body);
+    const { valid, message } = isRequestBodyValid(req.body);
     if (!valid) {
         return res.status(400).send(message);
     }
@@ -104,8 +104,8 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-function isGenreValid(genre) {
-    const { error } = reqSchema.validate(genre);
+function isRequestBodyValid(genre) {
+    const { error } = reqBodySchema.validate(genre);
     if (error) {
         return {
             valid: false,
