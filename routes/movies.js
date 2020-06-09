@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const ModelRouter = require('./model-router');
-const { Model, schema, mapper } = require('../models/genre');
+const { Model, schema, mapper } = require('../models/movie');
 
 mongoose.connect('mongodb://localhost/vidly')
    .then(() => console.log('Connected to MongoDB'))
