@@ -34,4 +34,5 @@ module.exports = {
    Model: Model,
    schema: reqBodySchema,
    mapper: reqBodyMapper,
+   dbSchema: dbSchema
 };

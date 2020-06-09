@@ -47,5 +47,6 @@ const reqBodyMapper = (body) => {
 module.exports = {
    Model: Model,
    schema: reqBodySchema,
-   mapper: reqBodyMapper
+   mapper: reqBodyMapper,
+   dbSchema
 };
