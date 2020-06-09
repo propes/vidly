@@ -65,13 +65,14 @@ router.post('/', async (req, res) => {
             $inc: { numberInStock: -1 }
          })
          .run();
-
-      res.send(model);
    }
    catch (ex) {
       res.status(500).send(ex.message);
       debug(ex);
+      return;
    }
+
+   res.send(model);
 });
 
 router.delete('/:id', async (req, res) => {

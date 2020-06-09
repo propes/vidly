@@ -47,12 +47,14 @@ class ModelRouter extends express.Router {
      
          try {
             await model.save();
-            res.send(model);
          }
          catch (ex) {
             res.status(400).send(ex.message);
             debug(ex);
+            return;
          }
+
+         res.send(model);
       });
 
       this.put('/:id', async (req, res) => {
@@ -66,7 +68,6 @@ class ModelRouter extends express.Router {
             const model = await Model.findByIdAndUpdate(req.params.id, {
                $set: reqBodyMapper(req.body)
             }, { new: true });
-
             res.send(model);
          }
          catch (ex) {

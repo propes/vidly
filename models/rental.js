@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const Joi = require('@hapi/joi');
+const _ = require('lodash');
+
 const customer = require('./customer');
 const movie = require('./movie');
 
@@ -10,10 +12,7 @@ const reqBodySchema = Joi.object({
 
 const dbSchema = mongoose.Schema({
    customer: {
-      type: mongoose.Schema({
-         name: customer.dbSchema.obj.name,
-         phone: customer.dbSchema.obj.name
-      }),
+      type: mongoose.Schema(_.pick(customer.dbSchema.obj, [ 'name', 'phone' ])),
       required: true
    },
    movie: movie.dbSchema,
