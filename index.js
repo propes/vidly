@@ -3,6 +3,9 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const debug = require('debug')('app:debug');
 const mongoose = require('mongoose');
+const Joi = require('@hapi/joi');
+Joi.objectId = require('joi-objectid')(Joi);
+
 const demoMiddleware = require('./middleware/demo');
 const genres = require('./routes/genres');
 const customers = require('./routes/customers');

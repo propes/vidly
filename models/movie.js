@@ -4,7 +4,7 @@ const genre = require('./genre');
 
 const reqBodySchema = Joi.object({
    title: Joi.string().required().max(255),
-   genreId: Joi.string().required(),
+   genreId: Joi.objectId(),
    numberInStock: Joi.number().required().min(0),
    dailyRentalRate: Joi.number().required().min(0)
 });

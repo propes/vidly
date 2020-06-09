@@ -52,7 +52,7 @@ class ModelRouter extends express.Router {
             return debug(ex);
          }
 
-         let model = new Movie({
+         const model = new Movie({
             title: req.body.title,
             genre: genre,
             numberInStock: req.body.numberInStock,
@@ -60,7 +60,7 @@ class ModelRouter extends express.Router {
          });
      
          try {
-            model = await model.save();
+            await model.save();
             res.send(model);
          }
          catch (ex) {

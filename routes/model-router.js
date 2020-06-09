@@ -43,10 +43,10 @@ class ModelRouter extends express.Router {
             return res.status(400).send(message);
          }
 
-         let model = new Model(reqBodyMapper(req.body));
+         const model = new Model(reqBodyMapper(req.body));
      
          try {
-            model = await model.save();
+            await model.save();
             res.send(model);
          }
          catch (ex) {
