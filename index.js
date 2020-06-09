@@ -2,6 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const debug = require('debug')('app:debug');
+const mongoose = require('mongoose');
 const demoMiddleware = require('./middleware/demo');
 const genres = require('./routes/genres');
 const customers = require('./routes/customers');
@@ -15,6 +16,10 @@ if (app.get('env') === 'development') {
    app.use(morgan('tiny'));
    debug('Morgan enabled...');
 }
+
+mongoose.connect('mongodb://localhost/vidly')
+   .then(() => console.log('Connected to MongoDB'))
+   .catch(err => console.error('Could not connect to MongoDB...', err));
 
 app.use(demoMiddleware);
 app.use(express.json());

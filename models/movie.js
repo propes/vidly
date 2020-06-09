@@ -3,28 +3,34 @@ const Joi = require('@hapi/joi');
 const genre = require('./genre');
 
 const reqBodySchema = Joi.object({
-   title: Joi.string()
-      .required(),
-   genre: genre.schema,
-   numberInStock: Joi.number()
-      .required(),
-   dailyRentalRate: Joi.number()
-      .required()
+   title: Joi.string().required().max(255),
+   genreId: Joi.string().required(),
+   numberInStock: Joi.number().required().min(0),
+   dailyRentalRate: Joi.number().required().min(0)
 });
 
 const dbSchema = mongoose.Schema({
    title: { 
       type: String,
+      required: true,
+      trim: true,
+      maxlength: 255
+   },
+   genre: {
+      type: genre.dbSchema,
       required: true
    },
-   genre: genre.dbSchema,
    numberInStock: {
       type: Number,
-      required: true
+      required: true,
+      min: 0,
+      max: 255
    },
    dailyRentalRate: {
       type: Number,
-      required: true
+      required: true,
+      min: 0,
+      max: 255
    }
 });
 
@@ -41,5 +47,5 @@ const reqBodyMapper = (body) => {
 module.exports = {
    Model: Model,
    schema: reqBodySchema,
-   mapper: reqBodyMapper,
+   mapper: reqBodyMapper
 };

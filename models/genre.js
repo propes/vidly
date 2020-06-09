@@ -5,12 +5,14 @@ const reqBodySchema = Joi.object({
    name: Joi.string()
       .alphanum()
       .required()
+      .max(50)
 });
 
 const dbSchema = mongoose.Schema({
    name: { 
       type: String,
-      required: true
+      required: true,
+      maxlength: 50
    }
 });
 

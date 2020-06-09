@@ -5,10 +5,6 @@ const debug = require('debug')('app:debug');
 
 const router = express.Router();
 
-mongoose.connect('mongodb://localhost/vidly')
-    .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.error('Could not connect to MongoDB...', err));
-
 const reqBodySchema = Joi.object({
     name: Joi.string()
         .alphanum()

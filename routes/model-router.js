@@ -38,7 +38,7 @@ class ModelRouter extends express.Router {
       });
 
       this.post('/', async (req, res) => {
-         const { valid, message } = isRequestBodyValid(req.body, reqBodySchema);
+         const { valid, message } = validate(req.body, reqBodySchema);
          if (!valid) {
             return res.status(400).send(message);
          }
@@ -56,7 +56,7 @@ class ModelRouter extends express.Router {
       });
 
       this.put('/:id', async (req, res) => {
-         const { valid, message } = isRequestBodyValid(req.body, reqBodySchema);
+         const { valid, message } = validate(req.body, reqBodySchema);
          if (!valid) {
             return res.status(400).send(message);
          }
@@ -88,7 +88,7 @@ class ModelRouter extends express.Router {
    }
 }
 
-function isRequestBodyValid(model, schema) {
+function validate(model, schema) {
    const { error } = schema.validate(model);
    if (error) {
       return {
