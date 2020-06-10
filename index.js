@@ -33,8 +33,8 @@ mongoose.connect(config.get('dbConnectionString'))
    .then(() => console.log('Connected to MongoDB'))
    .catch(err => console.error('Could not connect to MongoDB...', err));
 
-app.use(demoMiddleware);
 app.use(express.json());
+app.use(demoMiddleware);
 app.use('/api/genres', genres);
 app.use('/api/customers', customers);
 app.use('/api/movies', movies);

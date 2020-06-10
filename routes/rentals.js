@@ -4,6 +4,7 @@ const Fawn = require('fawn');
 const { Model: Rental, schema: reqBodySchema, mapper: reqBodyMapper } = require('../models/rental');
 const { Model: Customer } = require('../models/customer');
 const { Model: Movie } = require('../models/movie');
+const auth = require('../middleware/auth');
 
 const router = express.Router();
 Fawn.init(mongoose);
@@ -23,7 +24,7 @@ router.get('/', async (req, res) => {
    }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
    const { valid, message } = validate(req.body, reqBodySchema);
    if (!valid) {
       return res.status(400).send(message);
@@ -75,7 +76,7 @@ router.post('/', async (req, res) => {
    res.send(model);
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
    try
    {
       res.send(await Rental.findByIdAndRemove(req.params.id));

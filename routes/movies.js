@@ -1,6 +1,7 @@
 const express = require('express');
 const { Model: Movie, schema, mapper } = require('../models/movie');
 const { Model: Genre } = require('../models/genre');
+const auth = require('../middleware/auth');
 
 class ModelRouter extends express.Router {
    constructor(
@@ -38,7 +39,7 @@ class ModelRouter extends express.Router {
          }
       });
 
-      this.post('/', async (req, res) => {
+      this.post('/', auth, async (req, res) => {
          const { valid, message } = validate(req.body, reqBodySchema);
          if (!valid) {
             return res.status(400).send(message);
@@ -69,7 +70,7 @@ class ModelRouter extends express.Router {
          }
       });
 
-      this.put('/:id', async (req, res) => {
+      this.put('/:id', auth, async (req, res) => {
          const { valid, message } = validate(req.body, reqBodySchema);
          if (!valid) {
             return res.status(400).send(message);
@@ -100,7 +101,7 @@ class ModelRouter extends express.Router {
          }
       });
 
-      this.delete('/:id', async (req, res) => {
+      this.delete('/:id', auth, async (req, res) => {
          try
          {
             res.send(await Movie.findByIdAndRemove(req.params.id));

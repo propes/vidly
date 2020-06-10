@@ -1,6 +1,7 @@
 const express = require('express');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
+const auth = require('../middleware/auth');
 
 const { Model: User, schema: reqBodySchema, mapper: reqBodyMapper } = require('../models/user');
 
@@ -21,7 +22,7 @@ router.get('/', async (req, res) => {
    }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
    const { valid, message } = validate(req.body, reqBodySchema);
    if (!valid) {
       return res.status(400).send(message);

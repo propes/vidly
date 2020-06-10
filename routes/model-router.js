@@ -1,5 +1,6 @@
 const express = require('express');
 const debug = require('debug')('app:debug');
+const auth = require('../middleware/auth');
 
 class ModelRouter extends express.Router {
    constructor(
@@ -37,7 +38,7 @@ class ModelRouter extends express.Router {
          }
       });
 
-      this.post('/', async (req, res) => {
+      this.post('/', auth, async (req, res) => {
          const { valid, message } = validate(req.body, reqBodySchema);
          if (!valid) {
             return res.status(400).send(message);
@@ -57,7 +58,7 @@ class ModelRouter extends express.Router {
          res.send(model);
       });
 
-      this.put('/:id', async (req, res) => {
+      this.put('/:id', auth, async (req, res) => {
          const { valid, message } = validate(req.body, reqBodySchema);
          if (!valid) {
             return res.status(400).send(message);
@@ -76,7 +77,7 @@ class ModelRouter extends express.Router {
          }
       });
 
-      this.delete('/:id', async (req, res) => {
+      this.delete('/:id', auth, async (req, res) => {
          try
          {
             res.send(await Model.findByIdAndRemove(req.params.id));
