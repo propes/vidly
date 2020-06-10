@@ -5,6 +5,7 @@ const debug = require('debug')('app:debug');
 const mongoose = require('mongoose');
 const Joi = require('@hapi/joi');
 Joi.objectId = require('joi-objectid')(Joi);
+const config = require('config');
 
 const demoMiddleware = require('./middleware/demo');
 const genres = require('./routes/genres');
@@ -23,7 +24,12 @@ if (app.get('env') === 'development') {
    debug('Morgan enabled...');
 }
 
-mongoose.connect('mongodb://localhost/vidly')
+if (!config.get('jwtPrivateKey')) {
+   console.error("FATAL ERROR: jwtPrivateKey is not defined.")
+   process.exit(1);
+}
+
+mongoose.connect(config.get('dbConnectionString'))
    .then(() => console.log('Connected to MongoDB'))
    .catch(err => console.error('Could not connect to MongoDB...', err));
 
