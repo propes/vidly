@@ -27,15 +27,16 @@ class ModelRouter extends express.Router {
          }
       });
 
-      this.get('/:id', async (req, res) => {
+      this.get('/:id', async (req, res, next) => {
          try
          {
             const model = await Model.findById(req.params.id);
             res.send(model);
          }
          catch (ex) {
-            sendModelNotFound(res, req.params.id);
-            debug(ex);
+            // sendModelNotFound(res, req.params.id);
+            // debug(ex);
+            next(ex);
          }
       });
 
