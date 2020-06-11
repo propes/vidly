@@ -21,6 +21,19 @@ const error = require('./middleware/error');
 
 const app = express();
 
+// process.on('uncaughtException', (ex) => {
+//    console.error('We got an uncaught exception!');
+//    winston.error(ex.message, ex);
+// });
+
+winston.handleExceptions(new winston.transports.File({ filename: 'uncaughtExceptions.log' }));
+
+process.on('unhandledRejection', (ex) => {
+   // winston.error(ex.message, ex);
+   // process.exit(1);
+   throw ex;
+});
+
 winston.add(winston.transports.MongoDB, { db: config.get('dbConnectionString') });
 
 app.use(helmet());
