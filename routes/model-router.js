@@ -1,6 +1,7 @@
 const express = require('express');
 const debug = require('debug')('app:debug');
 const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
 
 class ModelRouter extends express.Router {
    constructor(
@@ -77,7 +78,7 @@ class ModelRouter extends express.Router {
          }
       });
 
-      this.delete('/:id', auth, async (req, res) => {
+      this.delete('/:id', [auth, admin], async (req, res) => {
          try
          {
             res.send(await Model.findByIdAndRemove(req.params.id));

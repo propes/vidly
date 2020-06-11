@@ -14,15 +14,20 @@ router.get('/', async (req, res) => {
    }
 
    try {
-      const models = await query;
-      res.send(models.map(m => _.pick(m, [ '_id', 'name', 'email' ])));
+      const models = await query.select('-password');
+      res.send(models);
    }
    catch (ex) {
       debug(ex);
    }
 });
 
-router.post('/', auth, async (req, res) => {
+router.get('/me', auth, async (req, res) => {
+   const user = await User.findById(req.user._id).select('-password');
+   res.send(user);
+});
+
+router.post('/', async (req, res) => {
    const { valid, message } = validate(req.body, reqBodySchema);
    if (!valid) {
       return res.status(400).send(message);
@@ -31,7 +36,7 @@ router.post('/', auth, async (req, res) => {
    let user = await User.findOne({ email: req.body.email });
    if (user) return res.status(400).send('User already registered.');
 
-   user = new User(_.pick(req.body, [ 'name', 'email' ]));
+   user = new User(req.body);
 
    const salt = await bcrypt.genSalt(10);
    user.password = await bcrypt.hash(req.body.password, salt);

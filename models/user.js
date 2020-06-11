@@ -6,7 +6,8 @@ const config = require('config');
 const reqBodySchema = Joi.object({
    name: Joi.string().required().max(50),
    email: Joi.string().required().max(255).email(),
-   password: Joi.string().max(255).required()
+   password: Joi.string().max(255).required(),
+   isAdmin: Joi.boolean()
 });
 
 const dbSchema = mongoose.Schema({
@@ -24,11 +25,15 @@ const dbSchema = mongoose.Schema({
    password: {
       type: String,
       require: true
-   }
+   },
+   isAdmin: Boolean,
+   roles: [],
+   permissions: [],
+   operations: []
 });
 
 dbSchema.methods.generateAuthToken = function() {
-   return jwt.sign({ _id: this._id }, config.get('jwtPrivateKey'));
+   return jwt.sign({ _id: this._id, isAdmin: this.isAdmin }, config.get('jwtPrivateKey'));
 }
 
 const Model = mongoose.model('user', dbSchema);
